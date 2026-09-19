@@ -1,0 +1,225 @@
+{
+    "title":  "닥터 최태수",
+    "author":  "조석호",
+    "totalEpisodes":  3236,
+    "totalVolumes":  27,
+    "generatedAt":  "2026-09-19T21:13:21+08:00",
+    "volumes":  [
+                    {
+                        "volume":  1,
+                        "title":  "1권",
+                        "startEpisode":  1,
+                        "endEpisode":  120,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-01.json"
+                    },
+                    {
+                        "volume":  2,
+                        "title":  "2권",
+                        "startEpisode":  121,
+                        "endEpisode":  240,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-02.json"
+                    },
+                    {
+                        "volume":  3,
+                        "title":  "3권",
+                        "startEpisode":  241,
+                        "endEpisode":  360,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-03.json"
+                    },
+                    {
+                        "volume":  4,
+                        "title":  "4권",
+                        "startEpisode":  361,
+                        "endEpisode":  480,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-04.json"
+                    },
+                    {
+                        "volume":  5,
+                        "title":  "5권",
+                        "startEpisode":  481,
+                        "endEpisode":  600,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-05.json"
+                    },
+                    {
+                        "volume":  6,
+                        "title":  "6권",
+                        "startEpisode":  601,
+                        "endEpisode":  720,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-06.json"
+                    },
+                    {
+                        "volume":  7,
+                        "title":  "7권",
+                        "startEpisode":  721,
+                        "endEpisode":  840,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-07.json"
+                    },
+                    {
+                        "volume":  8,
+                        "title":  "8권",
+                        "startEpisode":  841,
+                        "endEpisode":  960,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-08.json"
+                    },
+                    {
+                        "volume":  9,
+                        "title":  "9권",
+                        "startEpisode":  961,
+                        "endEpisode":  1080,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-09.json"
+                    },
+                    {
+                        "volume":  10,
+                        "title":  "10권",
+                        "startEpisode":  1081,
+                        "endEpisode":  1200,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-10.json"
+                    },
+                    {
+                        "volume":  11,
+                        "title":  "11권",
+                        "startEpisode":  1201,
+                        "endEpisode":  1320,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-11.json"
+                    },
+                    {
+                        "volume":  12,
+                        "title":  "12권",
+                        "startEpisode":  1321,
+                        "endEpisode":  1440,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-12.json"
+                    },
+                    {
+                        "volume":  13,
+                        "title":  "13권",
+                        "startEpisode":  1441,
+                        "endEpisode":  1560,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-13.json"
+                    },
+                    {
+                        "volume":  14,
+                        "title":  "14권",
+                        "startEpisode":  1561,
+                        "endEpisode":  1680,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-14.json"
+                    },
+                    {
+                        "volume":  15,
+                        "title":  "15권",
+                        "startEpisode":  1681,
+                        "endEpisode":  1800,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-15.json"
+                    },
+                    {
+                        "volume":  16,
+                        "title":  "16권",
+                        "startEpisode":  1801,
+                        "endEpisode":  1920,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-16.json"
+                    },
+                    {
+                        "volume":  17,
+                        "title":  "17권",
+                        "startEpisode":  1921,
+                        "endEpisode":  2040,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-17.json"
+                    },
+                    {
+                        "volume":  18,
+                        "title":  "18권",
+                        "startEpisode":  2041,
+                        "endEpisode":  2160,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-18.json"
+                    },
+                    {
+                        "volume":  19,
+                        "title":  "19권",
+                        "startEpisode":  2161,
+                        "endEpisode":  2280,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-19.json"
+                    },
+                    {
+                        "volume":  20,
+                        "title":  "20권",
+                        "startEpisode":  2281,
+                        "endEpisode":  2400,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-20.json"
+                    },
+                    {
+                        "volume":  21,
+                        "title":  "21권",
+                        "startEpisode":  2401,
+                        "endEpisode":  2520,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-21.json"
+                    },
+                    {
+                        "volume":  22,
+                        "title":  "22권",
+                        "startEpisode":  2521,
+                        "endEpisode":  2640,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-22.json"
+                    },
+                    {
+                        "volume":  23,
+                        "title":  "23권",
+                        "startEpisode":  2641,
+                        "endEpisode":  2760,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-23.json"
+                    },
+                    {
+                        "volume":  24,
+                        "title":  "24권",
+                        "startEpisode":  2761,
+                        "endEpisode":  2880,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-24.json"
+                    },
+                    {
+                        "volume":  25,
+                        "title":  "25권",
+                        "startEpisode":  2881,
+                        "endEpisode":  3000,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-25.json"
+                    },
+                    {
+                        "volume":  26,
+                        "title":  "26권",
+                        "startEpisode":  3001,
+                        "endEpisode":  3120,
+                        "chapterCount":  120,
+                        "path":  "./data/volumes/volume-26.json"
+                    },
+                    {
+                        "volume":  27,
+                        "title":  "27권",
+                        "startEpisode":  3121,
+                        "endEpisode":  3236,
+                        "chapterCount":  116,
+                        "path":  "./data/volumes/volume-27.json"
+                    }
+                ]
+}
