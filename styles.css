@@ -497,6 +497,7 @@ p {
   place-items: center;
   min-height: 0;
   padding: clamp(7px, 1.2vw, 17px) clamp(23px, 3vw, 44px);
+  padding-top: calc(clamp(7px, 1.2vw, 17px) + 34px);
   background:
     radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06), transparent 64%),
     repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 6px);
@@ -907,6 +908,7 @@ p {
 
   .reading-stage {
     padding: 6px 21px;
+    padding-top: 40px;
   }
 
   .book {
