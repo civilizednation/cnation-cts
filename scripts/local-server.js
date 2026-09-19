@@ -77,7 +77,7 @@ function listen(port) {
   server.listen(port, "127.0.0.1", () => {
     const url = `http://127.0.0.1:${port}/`;
     console.log("");
-    console.log(`Doctor Choi Reader: ${url}`);
+    console.log(`Cnation Book: ${url}`);
     console.log("Keep this window open while reading.");
     console.log("Press Ctrl+C to stop the local reader.");
     console.log("");
