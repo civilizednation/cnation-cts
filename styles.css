@@ -9,9 +9,10 @@
   --paper-shadow: rgba(43, 29, 17, 0.26);
   --font-family: "Noto Serif KR", serif;
   --font-size: 19px;
+  --font-weight: 400;
   --line-height: 1.9;
   --paragraph-gap: 0.55em;
-  --page-padding: 52px;
+  --page-padding: 26px;
   color-scheme: light;
   font-family: "Noto Sans KR", sans-serif;
 }
@@ -377,7 +378,7 @@ p {
   display: grid;
   place-items: center;
   min-height: 0;
-  padding: clamp(14px, 2.4vw, 34px) clamp(46px, 6vw, 88px);
+  padding: clamp(7px, 1.2vw, 17px) clamp(23px, 3vw, 44px);
   background:
     radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06), transparent 64%),
     repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 6px);
@@ -445,10 +446,11 @@ p {
 
 .page-content {
   position: absolute;
-  inset: calc(var(--page-padding) + 10px) var(--page-padding) calc(var(--page-padding) + 4px);
+  inset: calc(var(--page-padding) + 5px) var(--page-padding) calc(var(--page-padding) + 2px);
   overflow: hidden;
   font-family: var(--font-family);
   font-size: var(--font-size);
+  font-weight: var(--font-weight);
   line-height: var(--line-height);
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -774,6 +776,7 @@ p {
   visibility: hidden;
   font-family: var(--font-family);
   font-size: var(--font-size);
+  font-weight: var(--font-weight);
   line-height: var(--line-height);
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -785,7 +788,7 @@ p {
   }
 
   .reading-stage {
-    padding: 12px 42px;
+    padding: 6px 21px;
   }
 
   .book {
@@ -824,7 +827,7 @@ p {
 
 @media (max-width: 640px) {
   :root {
-    --page-padding: 32px;
+    --page-padding: 16px;
   }
 
   .library {
@@ -892,8 +895,8 @@ p {
   }
 
   .reading-stage {
-    padding-right: 30px;
-    padding-left: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
   }
 
   .book {

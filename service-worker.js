@@ -1,4 +1,4 @@
-const CACHE_VERSION = "doctor-choi-reader-v1";
+const CACHE_VERSION = "doctor-choi-reader-v3";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const BOOK_CACHE = `${CACHE_VERSION}-books`;
 const FONT_CACHE = `${CACHE_VERSION}-fonts`;

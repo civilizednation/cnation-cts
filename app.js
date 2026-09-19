@@ -2,14 +2,16 @@ const STORAGE_KEYS = {
   position: "doctor-choi-reader.position.v1",
   bookmarks: "doctor-choi-reader.bookmarks.v1",
   settings: "doctor-choi-reader.settings.v1",
+  layoutDensity: "doctor-choi-reader.layout-density.v2",
 };
 
 const DEFAULT_SETTINGS = {
   font: "noto-serif",
   fontSize: 19,
+  fontWeight: 400,
   lineHeight: 1.9,
   paragraphGap: 0.55,
-  pagePadding: 52,
+  pagePadding: 26,
 };
 
 const FONT_FAMILIES = {
@@ -27,7 +29,7 @@ const state = {
   pageIndex: 0,
   pages: [],
   pagesPerView: 2,
-  settings: loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS),
+  settings: loadSettings(),
   cache: new Map(),
   paginationToken: 0,
 };
@@ -72,6 +74,7 @@ const elements = {
   toast: document.querySelector("#toast"),
   measurePage: document.querySelector("#measure-page"),
   fontSelect: document.querySelector("#font-select"),
+  fontWeight: document.querySelector("#font-weight"),
   fontSize: document.querySelector("#font-size"),
   fontSizeOutput: document.querySelector("#font-size-output"),
   lineHeight: document.querySelector("#line-height"),
@@ -133,7 +136,7 @@ function bindEvents() {
     savePosition();
   });
 
-  const settingInputs = [elements.fontSelect, elements.fontSize, elements.lineHeight, elements.paragraphGap, elements.pagePadding];
+  const settingInputs = [elements.fontSelect, elements.fontWeight, elements.fontSize, elements.lineHeight, elements.paragraphGap, elements.pagePadding];
   settingInputs.forEach((input) => {
     input.addEventListener("input", () => {
       readSettingsFromControls();
@@ -641,10 +644,30 @@ function readSettingsFromControls() {
   state.settings = {
     font: elements.fontSelect.value,
     fontSize: Number(elements.fontSize.value),
+    fontWeight: Number(elements.fontWeight.value),
     lineHeight: Number(elements.lineHeight.value),
     paragraphGap: Number(elements.paragraphGap.value),
     pagePadding: Number(elements.pagePadding.value),
   };
+}
+
+function loadSettings() {
+  const savedSettings = localStorage.getItem(STORAGE_KEYS.settings);
+
+  if (!savedSettings) {
+    localStorage.setItem(STORAGE_KEYS.layoutDensity, "2");
+    return { ...DEFAULT_SETTINGS };
+  }
+
+  const settings = { ...DEFAULT_SETTINGS, ...loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS) };
+
+  if (localStorage.getItem(STORAGE_KEYS.layoutDensity) !== "2") {
+    settings.pagePadding = Math.max(12, Math.round(settings.pagePadding / 2));
+    localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
+    localStorage.setItem(STORAGE_KEYS.layoutDensity, "2");
+  }
+
+  return settings;
 }
 
 function applySettings(save = true) {
@@ -652,12 +675,14 @@ function applySettings(save = true) {
   const root = document.documentElement;
   root.style.setProperty("--font-family", FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font]);
   root.style.setProperty("--font-size", `${state.settings.fontSize}px`);
+  root.style.setProperty("--font-weight", state.settings.fontWeight);
   root.style.setProperty("--line-height", state.settings.lineHeight);
   root.style.setProperty("--paragraph-gap", `${state.settings.paragraphGap}em`);
   root.style.setProperty("--page-padding", `${state.settings.pagePadding}px`);
 
   elements.fontSelect.value = state.settings.font;
   elements.fontSize.value = state.settings.fontSize;
+  elements.fontWeight.value = state.settings.fontWeight;
   elements.lineHeight.value = state.settings.lineHeight;
   elements.paragraphGap.value = state.settings.paragraphGap;
   elements.pagePadding.value = state.settings.pagePadding;

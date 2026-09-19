@@ -130,6 +130,14 @@
         </label>
 
         <label class="setting-field">
+          <span>본문 글자 굵기</span>
+          <select id="font-weight">
+            <option value="400">보통</option>
+            <option value="700">굵게</option>
+          </select>
+        </label>
+
+        <label class="setting-field">
           <span>글자 크기 <output id="font-size-output">19px</output></span>
           <input id="font-size" type="range" min="16" max="28" step="1" value="19" />
         </label>
@@ -145,8 +153,8 @@
         </label>
 
         <label class="setting-field">
-          <span>페이지 여백 <output id="page-padding-output">52px</output></span>
-          <input id="page-padding" type="range" min="28" max="76" step="2" value="52" />
+          <span>페이지 여백 <output id="page-padding-output">26px</output></span>
+          <input id="page-padding" type="range" min="12" max="76" step="2" value="26" />
         </label>
 
         <button id="reset-settings" class="secondary-button" type="button">기본값으로 되돌리기</button>
