@@ -1,6 +1,6 @@
-# 닥터 최태수 리더
+# Cnation Book
 
-설치 가능한 태블릿용 웹 이북입니다. 별도 빌드나 서버 프로그램 없이 Vercel에서 바로 실행됩니다.
+여러 작품을 선택해 읽는 설치형 태블릿 웹 이북입니다. 현재 `닥터 최태수`와 `신경외과의사 박재현`을 제공하며, 별도 빌드 없이 Vercel에서 바로 실행됩니다.
 
 ## 1. GitHub에 올리기
 
@@ -13,12 +13,12 @@
 
 1. Vercel에서 **Add New → Project**를 선택합니다.
 2. 위에서 만든 GitHub 저장소를 Import합니다.
-3. **Project Name**을 `cnation-cts`로 입력합니다.
+3. 기존 Vercel 프로젝트 `cnation-cts`를 선택합니다.
 4. **Framework Preset**은 `Other`로 둡니다.
 5. **Root Directory**는 `./` 그대로 둡니다.
 6. Build Command와 Output Directory는 건드리지 않고 **Deploy**를 누릅니다.
 
-배포가 완료되면 `https://cnation-cts.vercel.app`으로 접속합니다. 해당 주소가 이미 다른 프로젝트에서 사용 중이면 Vercel이 다른 주소를 제안하므로 프로젝트 이름을 조금 바꿔야 합니다.
+배포가 완료되면 기존 주소 `https://cnation-cts.vercel.app`으로 접속합니다.
 
 태블릿에서 주소를 연 뒤 **앱 설치** 또는 **홈 화면에 추가**를 선택하면 전체 화면으로 실행됩니다.
 
@@ -40,8 +40,10 @@ manifest.webmanifest    PWA 설치 정보
 service-worker.js       오프라인 캐시
 vercel.json             Vercel/PWA 응답 설정
 icons/                  설치 아이콘
-data/catalog.json       27권 목록
-data/volumes/           1~27권 본문
+data/library.json       작품 목록
+data/catalog.json       닥터 최태수 27권 목록
+data/volumes/           닥터 최태수 1~27권 본문
+data/books/             추가 작품의 목록과 본문
 scripts/                본문·아이콘 재생성 도구
 ```
 
@@ -55,6 +57,6 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-icons.ps1
 
 ## 참고
 
-- 읽던 위치, 책갈피, 독서 설정은 해당 기기의 브라우저에 저장됩니다.
+- 작품별 읽던 위치와 책갈피, 공통 독서 설정은 해당 기기의 브라우저에 저장됩니다.
 - 한 번 열어 본 권은 오프라인에서도 다시 읽을 수 있습니다.
 - 원본 TXT는 이 저장소에 포함되지 않습니다.

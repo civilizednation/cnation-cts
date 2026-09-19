@@ -1,8 +1,9 @@
 const STORAGE_KEYS = {
-  position: "doctor-choi-reader.position.v1",
-  bookmarks: "doctor-choi-reader.bookmarks.v1",
+  legacyPosition: "doctor-choi-reader.position.v1",
+  legacyBookmarks: "doctor-choi-reader.bookmarks.v1",
   settings: "doctor-choi-reader.settings.v1",
   layoutDensity: "doctor-choi-reader.layout-density.v2",
+  libraryMigration: "cnation-book.library-migration.v1",
 };
 
 const DEFAULT_SETTINGS = {
@@ -22,6 +23,8 @@ const FONT_FAMILIES = {
 };
 
 const state = {
+  libraryData: null,
+  book: null,
   catalog: null,
   volumeData: null,
   volumeNumber: 1,
@@ -37,7 +40,13 @@ const state = {
 let deferredInstallPrompt = null;
 
 const elements = {
+  bookshelf: document.querySelector("#bookshelf"),
+  bookGrid: document.querySelector("#book-grid"),
   library: document.querySelector("#library"),
+  libraryMark: document.querySelector("#library-mark"),
+  libraryLabel: document.querySelector("#library-label"),
+  libraryTitle: document.querySelector("#library-title"),
+  librarySubtitle: document.querySelector("#library-subtitle"),
   reader: document.querySelector("#reader"),
   volumeGrid: document.querySelector("#volume-grid"),
   continueSection: document.querySelector("#continue-section"),
@@ -45,6 +54,7 @@ const elements = {
   continueTitle: document.querySelector("#continue-title"),
   continueMeta: document.querySelector("#continue-meta"),
   libraryBookmarks: document.querySelector("#library-bookmarks"),
+  backToBookshelf: document.querySelector("#back-to-bookshelf"),
   installApp: document.querySelector("#install-app"),
   backToLibrary: document.querySelector("#back-to-library"),
   volumeSelect: document.querySelector("#volume-select"),
@@ -99,14 +109,14 @@ async function init() {
   registerServiceWorker();
 
   try {
-    const response = await fetch("./data/catalog.json");
+    const response = await fetch("./data/library.json");
     if (!response.ok) throw new Error(`목록을 불러오지 못했습니다 (${response.status})`);
-    state.catalog = await response.json();
-    populateVolumeSelect();
-    renderLibrary();
+    state.libraryData = await response.json();
+    migrateLegacyDoctorData();
+    renderBookshelf();
   } catch (error) {
     console.error(error);
-    elements.volumeGrid.innerHTML = `
+    elements.bookGrid.innerHTML = `
       <div class="empty-bookmarks">
         책 데이터를 불러오지 못했습니다.<br />HTTP 서버로 실행했는지 확인해 주세요.
       </div>`;
@@ -116,6 +126,7 @@ async function init() {
 function bindEvents() {
   elements.continueButton.addEventListener("click", continueReading);
   elements.libraryBookmarks.addEventListener("click", openBookmarksDialog);
+  elements.backToBookshelf.addEventListener("click", showBookshelf);
   elements.installApp.addEventListener("click", installPwa);
   elements.closeBookmarks.addEventListener("click", () => elements.bookmarksDialog.close());
   elements.backToLibrary.addEventListener("click", showLibrary);
@@ -221,6 +232,102 @@ function registerServiceWorker() {
   });
 }
 
+function positionKey(bookId = state.book?.id) {
+  return `cnation-book.position.${bookId}.v1`;
+}
+
+function bookmarksKey(bookId = state.book?.id) {
+  return `cnation-book.bookmarks.${bookId}.v1`;
+}
+
+function migrateLegacyDoctorData() {
+  if (localStorage.getItem(STORAGE_KEYS.libraryMigration) === "1") return;
+  const legacyPosition = localStorage.getItem(STORAGE_KEYS.legacyPosition);
+  const legacyBookmarks = localStorage.getItem(STORAGE_KEYS.legacyBookmarks);
+  if (legacyPosition && !localStorage.getItem(positionKey("doctor-choi"))) {
+    localStorage.setItem(positionKey("doctor-choi"), legacyPosition);
+  }
+  if (legacyBookmarks && !localStorage.getItem(bookmarksKey("doctor-choi"))) {
+    localStorage.setItem(bookmarksKey("doctor-choi"), legacyBookmarks);
+  }
+  localStorage.setItem(STORAGE_KEYS.libraryMigration, "1");
+}
+
+function renderBookshelf() {
+  elements.bookGrid.replaceChildren();
+
+  state.libraryData.books.forEach((book) => {
+    const position = loadJSON(positionKey(book.id), null);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "book-card";
+    button.setAttribute("aria-label", `${book.title}, 전 ${book.totalVolumes}권 ${book.totalEpisodes}화`);
+
+    const mark = document.createElement("span");
+    mark.className = "book-card-mark";
+    mark.setAttribute("aria-hidden", "true");
+    mark.textContent = book.mark;
+
+    const copy = document.createElement("span");
+    copy.className = "book-card-copy";
+    const label = document.createElement("small");
+    label.textContent = book.label;
+    const title = document.createElement("strong");
+    title.textContent = book.title;
+    const meta = document.createElement("span");
+    meta.textContent = `전 ${book.totalVolumes}권 · ${book.totalEpisodes.toLocaleString("ko-KR")}화`;
+    copy.append(label, title, meta);
+
+    if (position) {
+      const resume = document.createElement("span");
+      resume.className = "book-card-resume";
+      resume.textContent = `${position.volume}권 ${position.chapterNumber}화부터 이어 읽기`;
+      copy.appendChild(resume);
+    }
+
+    button.append(mark, copy);
+    button.addEventListener("click", () => openBook(book.id));
+    elements.bookGrid.appendChild(button);
+  });
+}
+
+async function openBook(bookId) {
+  const book = state.libraryData.books.find((entry) => entry.id === bookId);
+  if (!book) return;
+
+  showLoading(`${book.title} 서재를 열고 있습니다…`);
+  try {
+    const response = await fetch(book.catalogPath);
+    if (!response.ok) throw new Error(`작품 목록을 불러오지 못했습니다 (${response.status})`);
+    state.book = book;
+    state.catalog = await response.json();
+    state.volumeData = null;
+    state.volumeNumber = 1;
+    state.chapterIndex = 0;
+    state.pageIndex = 0;
+    updateLibraryHeader();
+    populateVolumeSelect();
+    renderLibrary();
+    elements.bookshelf.hidden = true;
+    elements.reader.hidden = true;
+    elements.library.hidden = false;
+    document.title = `${book.title} · Cnation Book`;
+    window.scrollTo({ top: 0 });
+  } catch (error) {
+    console.error(error);
+    showToast("작품을 여는 중 문제가 생겼습니다");
+  } finally {
+    hideLoading();
+  }
+}
+
+function updateLibraryHeader() {
+  elements.libraryMark.textContent = state.book.mark;
+  elements.libraryLabel.textContent = state.book.label;
+  elements.libraryTitle.textContent = state.book.title;
+  elements.librarySubtitle.textContent = `전 ${state.catalog.totalVolumes}권 · ${state.catalog.totalEpisodes.toLocaleString("ko-KR")}화`;
+}
+
 function populateVolumeSelect() {
   elements.volumeSelect.innerHTML = state.catalog.volumes
     .map((volume) => `<option value="${volume.volume}">${volume.volume}권</option>`)
@@ -228,7 +335,7 @@ function populateVolumeSelect() {
 }
 
 function renderLibrary() {
-  const position = loadJSON(STORAGE_KEYS.position, null);
+  const position = loadJSON(positionKey(), null);
   elements.volumeGrid.innerHTML = "";
 
   state.catalog.volumes.forEach((volume) => {
@@ -240,14 +347,14 @@ function renderLibrary() {
     const progress = position?.volume === volume.volume ? calculateSavedVolumeProgress(position, volume) : 0;
     button.innerHTML = `
       <span class="volume-number">${String(volume.volume).padStart(2, "0")}</span>
-      <span class="volume-title">닥터 최태수</span>
+      <span class="volume-title">${state.book.title}</span>
       <span class="volume-range">${volume.startEpisode}–${volume.endEpisode}화</span>
       <span class="volume-progress-bar" aria-hidden="true"><span style="--progress:${progress}%"></span></span>`;
     button.addEventListener("click", () => startVolume(volume.volume));
     elements.volumeGrid.appendChild(button);
   });
 
-  if (position && position.volume >= 1 && position.volume <= 27) {
+  if (position && position.volume >= 1 && position.volume <= state.catalog.totalVolumes) {
     elements.continueSection.hidden = false;
     elements.continueTitle.textContent = `${position.volume}권 · ${position.chapterNumber}화`;
     elements.continueMeta.textContent = `${Math.max(1, position.pageIndex + 1)}쪽에서 이어 읽기`;
@@ -262,7 +369,7 @@ function calculateSavedVolumeProgress(position, volume) {
 }
 
 async function continueReading() {
-  const position = loadJSON(STORAGE_KEYS.position, null);
+  const position = loadJSON(positionKey(), null);
   if (!position) return;
   await startVolume(position.volume, position);
 }
@@ -301,14 +408,14 @@ async function startVolume(volumeNumber, requestedPosition = null) {
 }
 
 async function loadVolume(volumeNumber) {
-  if (state.cache.has(volumeNumber)) return state.cache.get(volumeNumber);
+  const cacheKey = `${state.book.id}:${volumeNumber}`;
+  if (state.cache.has(cacheKey)) return state.cache.get(cacheKey);
   const descriptor = state.catalog.volumes.find((volume) => volume.volume === volumeNumber);
   if (!descriptor) throw new Error("존재하지 않는 권입니다.");
   const response = await fetch(descriptor.path);
   if (!response.ok) throw new Error(`${volumeNumber}권을 불러오지 못했습니다 (${response.status})`);
   const data = await response.json();
-  state.cache.clear();
-  state.cache.set(volumeNumber, data);
+  state.cache.set(cacheKey, data);
   return data;
 }
 
@@ -434,7 +541,7 @@ function renderSpread() {
   elements.volumeProgress.textContent = `${state.volumeNumber}권 ${Math.min(100, Math.round(volumeRatio * 100))}%`;
 
   const atBeginning = state.volumeNumber === 1 && state.chapterIndex === 0 && state.pageIndex === 0;
-  const atEnd = state.volumeNumber === 27 && state.chapterIndex === state.volumeData.chapters.length - 1 && visibleLastPage >= state.pages.length;
+  const atEnd = state.volumeNumber === state.catalog.totalVolumes && state.chapterIndex === state.volumeData.chapters.length - 1 && visibleLastPage >= state.pages.length;
   elements.previousPage.disabled = atBeginning;
   elements.nextPage.disabled = atEnd;
   updateBookmarkButton();
@@ -460,7 +567,7 @@ function renderPage(pageElement, contentElement, headElement, numberElement, pag
     contentElement.appendChild(paragraph);
   });
 
-  headElement.textContent = index % 2 === 0 ? `닥터 최태수 · ${state.volumeNumber}권` : chapter.title;
+  headElement.textContent = index % 2 === 0 ? `${state.book.title} · ${state.volumeNumber}권` : chapter.title;
   numberElement.textContent = String(index + 1);
 }
 
@@ -496,7 +603,7 @@ async function moveChapter(direction) {
   }
 
   const nextVolume = state.volumeNumber + direction;
-  if (nextVolume < 1 || nextVolume > 27) return;
+  if (nextVolume < 1 || nextVolume > state.catalog.totalVolumes) return;
   showLoading(`${nextVolume}권을 펼치고 있습니다…`);
   try {
     state.volumeData = await loadVolume(nextVolume);
@@ -538,9 +645,20 @@ async function repaginateAtCurrentRatio() {
 
 function showLibrary() {
   if (state.volumeData) savePosition();
+  elements.bookshelf.hidden = true;
   elements.reader.hidden = true;
   elements.library.hidden = false;
   renderLibrary();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showBookshelf() {
+  if (state.volumeData && !elements.reader.hidden) savePosition();
+  elements.reader.hidden = true;
+  elements.library.hidden = true;
+  elements.bookshelf.hidden = false;
+  renderBookshelf();
+  document.title = "Cnation Book";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -552,14 +670,14 @@ function savePosition() {
     pageIndex: state.pageIndex,
     updatedAt: new Date().toISOString(),
   };
-  localStorage.setItem(STORAGE_KEYS.position, JSON.stringify(position));
+  localStorage.setItem(positionKey(), JSON.stringify(position));
 }
 
 function toggleBookmark() {
   if (!state.volumeData) return;
   const chapter = currentChapter();
   const key = `${state.volumeNumber}-${chapter.number}-${state.pageIndex}`;
-  const bookmarks = loadJSON(STORAGE_KEYS.bookmarks, []);
+  const bookmarks = loadJSON(bookmarksKey(), []);
   const existingIndex = bookmarks.findIndex((bookmark) => bookmark.key === key);
 
   if (existingIndex >= 0) {
@@ -576,21 +694,21 @@ function toggleBookmark() {
     showToast("현재 페이지를 책갈피에 저장했습니다");
   }
 
-  localStorage.setItem(STORAGE_KEYS.bookmarks, JSON.stringify(bookmarks));
+  localStorage.setItem(bookmarksKey(), JSON.stringify(bookmarks));
   updateBookmarkButton();
 }
 
 function updateBookmarkButton() {
   if (!state.volumeData) return;
   const key = `${state.volumeNumber}-${currentChapter().number}-${state.pageIndex}`;
-  const isBookmarked = loadJSON(STORAGE_KEYS.bookmarks, []).some((bookmark) => bookmark.key === key);
+  const isBookmarked = loadJSON(bookmarksKey(), []).some((bookmark) => bookmark.key === key);
   elements.bookmarkButton.classList.toggle("is-bookmarked", isBookmarked);
   elements.bookmarkButton.textContent = isBookmarked ? "♠" : "♧";
   elements.bookmarkButton.setAttribute("aria-label", isBookmarked ? "현재 페이지 책갈피 지우기" : "현재 페이지 책갈피");
 }
 
 function openBookmarksDialog() {
-  const bookmarks = loadJSON(STORAGE_KEYS.bookmarks, []);
+  const bookmarks = loadJSON(bookmarksKey(), []);
   elements.bookmarksList.replaceChildren();
 
   if (!bookmarks.length) {
@@ -622,8 +740,8 @@ function openBookmarksDialog() {
       remove.textContent = "×";
       remove.setAttribute("aria-label", `${bookmark.volume}권 ${bookmark.chapterNumber}화 책갈피 삭제`);
       remove.addEventListener("click", () => {
-        const next = loadJSON(STORAGE_KEYS.bookmarks, []).filter((saved) => saved.key !== bookmark.key);
-        localStorage.setItem(STORAGE_KEYS.bookmarks, JSON.stringify(next));
+        const next = loadJSON(bookmarksKey(), []).filter((saved) => saved.key !== bookmark.key);
+        localStorage.setItem(bookmarksKey(), JSON.stringify(next));
         openBookmarksDialogRefresh();
       });
 

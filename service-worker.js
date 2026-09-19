@@ -1,4 +1,4 @@
-const CACHE_VERSION = "doctor-choi-reader-v6";
+const CACHE_VERSION = "cnation-book-v2";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const BOOK_CACHE = `${CACHE_VERSION}-books`;
 const FONT_CACHE = `${CACHE_VERSION}-fonts`;
@@ -13,7 +13,9 @@ const APP_SHELL = [
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png",
-  "./data/catalog.json"
+  "./data/library.json",
+  "./data/catalog.json",
+  "./data/books/park-jaehyun/catalog.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -35,7 +37,7 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
 
-  if (url.origin === self.location.origin && url.pathname.includes("/data/volumes/")) {
+  if (url.origin === self.location.origin && url.pathname.includes("/volumes/")) {
     event.respondWith(cacheFirst(request, BOOK_CACHE));
     return;
   }

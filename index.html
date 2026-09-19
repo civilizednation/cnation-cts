@@ -7,10 +7,10 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="닥터 최태수" />
+    <meta name="apple-mobile-web-app-title" content="Cnation Book" />
     <meta
       name="description"
-      content="닥터 최태수 전용 온라인 독서 앱. 27권 구성과 이어 읽기, 책갈피, 맞춤 독서 설정을 지원합니다."
+      content="의학 장편소설을 읽는 온라인 서재. 이어 읽기, 책갈피, 맞춤 독서 설정을 지원합니다."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,20 +22,47 @@
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="stylesheet" href="./styles.css" />
-    <title>닥터 최태수</title>
+    <title>Cnation Book</title>
   </head>
   <body>
-    <main id="library" class="library" aria-labelledby="library-title">
+    <main id="bookshelf" class="library bookshelf" aria-labelledby="bookshelf-title">
       <header class="library-header">
-        <div class="brand-mark" aria-hidden="true">崔</div>
+        <div class="brand-mark" aria-hidden="true">冊</div>
         <div>
-          <p class="eyebrow">조석호 장편소설</p>
-          <h1 id="library-title">닥터 최태수</h1>
-          <p class="library-subtitle">전 27권 · 3,236화</p>
+          <p class="eyebrow">CNATION BOOK</p>
+          <h1 id="bookshelf-title">나의 서재</h1>
+          <p class="library-subtitle">읽을 작품을 선택하세요</p>
         </div>
         <div class="library-actions">
           <button id="install-app" class="quiet-button install-button" type="button" hidden>
             <span aria-hidden="true">↓</span> 앱 설치
+          </button>
+        </div>
+      </header>
+
+      <section class="book-section" aria-labelledby="book-list-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">작품</p>
+            <h2 id="book-list-title">어떤 이야기를 읽을까요?</h2>
+          </div>
+          <p>작품을 선택하면 권 목록으로 들어갑니다.</p>
+        </div>
+        <div id="book-grid" class="book-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <main id="library" class="library" aria-labelledby="library-title" hidden>
+      <header class="library-header">
+        <div id="library-mark" class="brand-mark" aria-hidden="true">崔</div>
+        <div>
+          <p id="library-label" class="eyebrow">조석호 장편소설</p>
+          <h1 id="library-title">닥터 최태수</h1>
+          <p id="library-subtitle" class="library-subtitle">전 27권 · 3,236화</p>
+        </div>
+        <div class="library-actions">
+          <button id="back-to-bookshelf" class="quiet-button" type="button">
+            <span aria-hidden="true">←</span> 작품 선택
           </button>
           <button id="library-bookmarks" class="quiet-button" type="button" aria-label="저장한 책갈피 보기">
             <span aria-hidden="true">⌑</span> 책갈피
