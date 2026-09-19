@@ -372,7 +372,7 @@ p {
 
 .reader-location {
   position: absolute;
-  top: max(2px, env(safe-area-inset-top));
+  top: calc(env(safe-area-inset-top) - 8px);
   left: 50%;
   transform: translateX(-50%);
 }
@@ -387,7 +387,7 @@ p {
 
 .reader-location select {
   max-width: 170px;
-  height: 40px;
+  height: 36px;
   padding: 0 30px 0 11px;
   border-color: rgba(255, 255, 255, 0.1);
   background: rgba(17, 24, 32, 0.24);
@@ -559,8 +559,8 @@ p {
 
 .page-turn:hover,
 .page-turn:focus-visible {
-  border-color: rgba(185, 150, 91, 0.34);
-  background: rgba(23, 31, 40, 0.4);
+  border-color: rgba(255, 255, 255, 0.055);
+  background: rgba(12, 17, 23, 0.24);
   color: #e7cf9f;
 }
 
