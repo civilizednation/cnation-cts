@@ -1,0 +1,23 @@
+{
+  "title": "Cnation Book",
+  "books": [
+    {
+      "id": "doctor-choi",
+      "title": "닥터 최태수",
+      "label": "조석호 장편소설",
+      "mark": "崔",
+      "totalEpisodes": 3236,
+      "totalVolumes": 27,
+      "catalogPath": "./data/catalog.json"
+    },
+    {
+      "id": "park-jaehyun",
+      "title": "신경외과의사 박재현",
+      "label": "의학 장편소설",
+      "mark": "朴",
+      "totalEpisodes": 289,
+      "totalVolumes": 3,
+      "catalogPath": "./data/books/park-jaehyun/catalog.json"
+    }
+  ]
+}

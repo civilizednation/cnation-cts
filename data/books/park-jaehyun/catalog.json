@@ -1,0 +1,36 @@
+{
+    "id":  "park-jaehyun",
+    "title":  "신경외과의사 박재현",
+    "author":  "",
+    "label":  "의학 장편소설",
+    "mark":  "朴",
+    "totalEpisodes":  289,
+    "totalVolumes":  3,
+    "generatedAt":  "2026-09-19T22:31:17+08:00",
+    "volumes":  [
+                    {
+                        "volume":  1,
+                        "title":  "1권",
+                        "startEpisode":  1,
+                        "endEpisode":  100,
+                        "chapterCount":  100,
+                        "path":  "./data/books/park-jaehyun/volumes/volume-01.json"
+                    },
+                    {
+                        "volume":  2,
+                        "title":  "2권",
+                        "startEpisode":  101,
+                        "endEpisode":  200,
+                        "chapterCount":  100,
+                        "path":  "./data/books/park-jaehyun/volumes/volume-02.json"
+                    },
+                    {
+                        "volume":  3,
+                        "title":  "3권",
+                        "startEpisode":  201,
+                        "endEpisode":  289,
+                        "chapterCount":  89,
+                        "path":  "./data/books/park-jaehyun/volumes/volume-03.json"
+                    }
+                ]
+}
