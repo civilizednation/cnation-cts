@@ -1,3 +1,64 @@
+/* 본문·UI에 실제로 쓰이는 글자만 남긴 서브셋 폰트입니다.
+   원본은 모두 SIL Open Font License 1.1 (fonts/OFL.txt).
+   새 작품을 추가한 뒤에는 scripts/build-fonts.py 로 다시 생성하세요.
+   굵기는 400·700만 내장하며, CSS의 font-weight: 600 은 브라우저가 700으로 맞춥니다. */
+@font-face {
+  font-family: "Noto Serif KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/noto-serif-kr-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Serif KR";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/noto-serif-kr-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/noto-sans-kr-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/noto-sans-kr-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Gowun Batang";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/gowun-batang-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Gowun Batang";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/gowun-batang-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nanum Myeongjo";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/nanum-myeongjo-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nanum Myeongjo";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/nanum-myeongjo-700.woff2") format("woff2");
+}
+
 :root {
   --ink: #20252b;
   --ink-soft: #5b5f63;

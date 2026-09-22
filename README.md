@@ -40,12 +40,31 @@ manifest.webmanifest    PWA 설치 정보
 service-worker.js       오프라인 캐시
 vercel.json             Vercel/PWA 응답 설정
 icons/                  설치 아이콘
+fonts/                  본문 글꼴 (서브셋 woff2 8종)
 data/library.json       작품 목록
 data/catalog.json       닥터 최태수 27권 목록
 data/volumes/           닥터 최태수 1~27권 본문
 data/books/             추가 작품의 목록과 본문
 scripts/                본문·아이콘 재생성 도구
 ```
+
+## 글꼴 다시 만들기
+
+글꼴은 외부 CDN에서 받지 않고 `fonts/` 폴더에 내장합니다. 본문에 실제로 쓰이는
+글자만 남긴 서브셋이라 8종 전부 합쳐 1.8MB 정도입니다.
+
+새 작품이나 새 권을 `data/`에 추가했다면, 그전에 없던 글자가 들어올 수 있으므로
+아래를 실행해 글꼴을 다시 만듭니다.
+
+```bash
+pip install fonttools brotli
+python scripts/build-fonts.py
+```
+
+다시 만든 뒤에는 `service-worker.js`의 `CACHE_VERSION` 값을 한 단계 올려야
+이미 설치된 기기가 새 글꼴을 내려받습니다.
+
+자세한 내용은 `fonts/README.md`를 참고하세요.
 
 ## 앱 아이콘 바꾸기
 

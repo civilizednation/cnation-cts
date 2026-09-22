@@ -419,6 +419,18 @@ async function loadVolume(volumeNumber) {
   return data;
 }
 
+async function ensureReadingFont() {
+  if (!document.fonts) return;
+  const family = FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font];
+  const size = `${state.settings.fontSize}px`;
+  try {
+    await Promise.all([400, 600, 700].map((weight) => document.fonts.load(`${weight} ${size} ${family}`)));
+  } catch (error) {
+    // 서브셋 폰트를 못 받아도 시스템 글꼴로 계속 읽을 수 있게 둡니다.
+  }
+  await document.fonts.ready;
+}
+
 async function paginateCurrentChapter(requestedPage = 0) {
   if (!state.volumeData) return;
   const token = ++state.paginationToken;
@@ -426,7 +438,7 @@ async function paginateCurrentChapter(requestedPage = 0) {
   const chapter = currentChapter();
   elements.chapterSelect.value = String(state.chapterIndex);
 
-  if (document.fonts?.ready) await document.fonts.ready;
+  await ensureReadingFont();
   await nextFrame();
 
   state.pagesPerView = getPagesPerView();

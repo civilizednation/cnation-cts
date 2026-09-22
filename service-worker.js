@@ -1,4 +1,4 @@
-const CACHE_VERSION = "cnation-book-v3";
+const CACHE_VERSION = "cnation-book-v4";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const BOOK_CACHE = `${CACHE_VERSION}-books`;
 const FONT_CACHE = `${CACHE_VERSION}-fonts`;
@@ -15,7 +15,11 @@ const APP_SHELL = [
   "./icons/apple-touch-icon.png",
   "./data/library.json",
   "./data/catalog.json",
-  "./data/books/park-jaehyun/catalog.json"
+  "./data/books/park-jaehyun/catalog.json",
+  "./fonts/noto-serif-kr-400.woff2",
+  "./fonts/noto-serif-kr-700.woff2",
+  "./fonts/noto-sans-kr-400.woff2",
+  "./fonts/noto-sans-kr-700.woff2"
 ];
 
 self.addEventListener("install", (event) => {
@@ -42,8 +46,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
-    event.respondWith(staleWhileRevalidate(request, FONT_CACHE));
+  if (url.origin === self.location.origin && url.pathname.includes("/fonts/")) {
+    event.respondWith(cacheFirst(request, FONT_CACHE));
     return;
   }
 
