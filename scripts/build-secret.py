@@ -34,6 +34,23 @@ EXPECTED = [
 ]
 
 
+# 원문 오탈자. 폰트 문제가 아니라 스캔 과정에서 생긴 글자입니다.
+TYPOS = {"뼌": "뻔", "잫": "잖"}
+
+
+def clean(text):
+    """한자 병기를 덜어내고 원문 오탈자를 고칩니다.
+
+    본문에 한자는 괄호 병기 다섯 군데에만 나옵니다. 앞의 한글이 그대로
+    남으므로 괄호째 덜어내도 뜻이 상하지 않고, 내장 서브셋 글꼴만으로
+    본문 전체를 표시할 수 있게 됩니다.
+    """
+    text = re.sub(r"\(([^)]*[\u4e00-\u9fff][^)]*)\)", "", text)
+    for wrong, right in TYPOS.items():
+        text = text.replace(wrong, right)
+    return text
+
+
 def is_heading(line, previous):
     """빈 줄 뒤에 오는 짧은 들여쓴 줄을 장 제목으로 봅니다."""
     text = line.strip()
@@ -123,7 +140,7 @@ def convert(path, volume, titles):
         built.append({
             "number": index,
             "title": f"{index}장 {title}",
-            "content": "\n\n".join(paragraphs),
+            "content": clean("\n\n".join(paragraphs)),
         })
     return built
 
@@ -176,22 +193,7 @@ def main():
     (OUT_DIR / "catalog.json").write_text(
         json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    shelf = {
-        "title": BOOK["title"],
-        "books": [{
-            "id": BOOK["id"],
-            "title": BOOK["title"],
-            "label": BOOK["label"],
-            "mark": BOOK["mark"],
-            "totalEpisodes": offset,
-            "totalVolumes": len(volumes),
-            "catalogPath": "./data/books/secret/catalog.json",
-        }],
-    }
-    (ROOT / "data" / "library-bm.json").write_text(
-        json.dumps(shelf, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-    print(f"완료 — 총 {offset}장, data/books/secret/ 와 data/library-bm.json 생성")
+    print(f"완료 — 총 {offset}장, data/books/secret/ 생성")
 
 
 if __name__ == "__main__":

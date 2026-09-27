@@ -17,9 +17,7 @@ const mime = {
 createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
   const safePath = normalize(pathname).replace(/^(\.\.[/\\])+/, "");
-  // /bm 은 같은 앱을 다른 서재로 여는 주소입니다 (vercel.json 의 rewrite 와 같은 규칙).
-  const normalized = safePath.replace(/\/+$/, "") || "/";
-  let filePath = join(root, normalized === "/" || normalized === "/bm" ? "index.html" : safePath);
+  let filePath = join(root, safePath === "/" ? "index.html" : safePath);
 
   try {
     if (statSync(filePath).isDirectory()) filePath = join(filePath, "index.html");

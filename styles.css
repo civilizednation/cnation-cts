@@ -60,7 +60,7 @@
 }
 
 :root {
-  /* 내장 서브셋 글꼴. /bm 서재는 아래에서 기기 기본 글꼴로 바꿉니다. */
+  /* 내장 서브셋 글꼴 (fonts/). 곳곳에 이름을 적지 않고 여기서 모읍니다. */
   --display-font: "Noto Serif KR", serif;
   --ui-font: "Noto Sans KR", sans-serif;
   --ink: #20252b;
@@ -1123,15 +1123,4 @@ p {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* /bm 서재: 내장 글꼴을 전혀 받지 않고 기기 기본 글꼴로 읽습니다.
-   그래서 글꼴 고르는 칸도 감춥니다. */
-:root[data-shelf="bm"] {
-  --display-font: serif;
-  --ui-font: system-ui, sans-serif;
-}
-
-:root[data-shelf="bm"] #font-field {
-  display: none;
 }

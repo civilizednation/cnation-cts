@@ -15,10 +15,6 @@ const DEFAULT_SETTINGS = {
   pagePadding: 26,
 };
 
-// /bm 으로 열면 이 책만 있는 서재를 보여주고, 내장 글꼴 대신 기기 기본 글꼴을 씁니다.
-const PRIVATE_SHELF = document.documentElement.dataset.shelf === "bm";
-const SYSTEM_FONT = "serif";
-
 const FONT_FAMILIES = {
   "noto-serif": '"Noto Serif KR", serif',
   gowun: '"Gowun Batang", serif',
@@ -113,7 +109,7 @@ async function init() {
   registerServiceWorker();
 
   try {
-    const response = await fetch(PRIVATE_SHELF ? "./data/library-bm.json" : "./data/library.json");
+    const response = await fetch("./data/library.json");
     if (!response.ok) throw new Error(`목록을 불러오지 못했습니다 (${response.status})`);
     state.libraryData = await response.json();
     migrateLegacyDoctorData();
@@ -425,7 +421,7 @@ async function loadVolume(volumeNumber) {
 
 async function ensureReadingFont() {
   if (!document.fonts) return;
-  const family = PRIVATE_SHELF ? SYSTEM_FONT : FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font];
+  const family = FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font];
   const size = `${state.settings.fontSize}px`;
   try {
     await Promise.all([400, 600, 700].map((weight) => document.fonts.load(`${weight} ${size} ${family}`)));
@@ -807,10 +803,7 @@ function loadSettings() {
 function applySettings(save = true) {
   state.settings = { ...DEFAULT_SETTINGS, ...state.settings };
   const root = document.documentElement;
-  root.style.setProperty(
-    "--font-family",
-    PRIVATE_SHELF ? SYSTEM_FONT : FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font],
-  );
+  root.style.setProperty("--font-family", FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font]);
   root.style.setProperty("--font-size", `${state.settings.fontSize}px`);
   root.style.setProperty("--font-weight", state.settings.fontWeight);
   root.style.setProperty("--line-height", state.settings.lineHeight);
