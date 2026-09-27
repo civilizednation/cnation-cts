@@ -35,6 +35,31 @@
           "value": "public, max-age=604800, must-revalidate"
         }
       ]
+    },
+    {
+      "source": "/bm",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/data/books/secret/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/bm",
+      "destination": "/index.html"
     }
   ]
 }

@@ -54,6 +54,9 @@ def collect_codepoints():
     chars = set()
 
     for path in sorted((ROOT / "data").rglob("*.json")):
+        # /bm 서재의 책은 기기 기본 글꼴로 읽으므로 서브셋에 넣지 않습니다.
+        if "books/secret/" in path.as_posix():
+            continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (ValueError, OSError) as error:

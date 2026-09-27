@@ -36,7 +36,10 @@ function createServer() {
       return;
     }
 
-    const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
+    // /bm 은 같은 앱을 다른 서재로 여는 주소입니다 (vercel.json 의 rewrite 와 같은 규칙).
+    const normalized = pathname.replace(/\/+$/, "") || "/";
+    const relativePath =
+      normalized === "/" || normalized === "/bm" ? "index.html" : pathname.replace(/^\/+/, "");
     const filePath = path.resolve(root, relativePath);
 
     if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {

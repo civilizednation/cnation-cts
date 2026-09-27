@@ -1,0 +1,14 @@
+{
+  "title": "비밀",
+  "books": [
+    {
+      "id": "secret",
+      "title": "비밀",
+      "label": "히가시노 게이고 장편소설",
+      "mark": "秘",
+      "totalEpisodes": 17,
+      "totalVolumes": 2,
+      "catalogPath": "./data/books/secret/catalog.json"
+    }
+  ]
+}

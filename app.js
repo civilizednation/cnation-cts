@@ -15,6 +15,10 @@ const DEFAULT_SETTINGS = {
   pagePadding: 26,
 };
 
+// /bm 으로 열면 이 책만 있는 서재를 보여주고, 내장 글꼴 대신 기기 기본 글꼴을 씁니다.
+const PRIVATE_SHELF = document.documentElement.dataset.shelf === "bm";
+const SYSTEM_FONT = "serif";
+
 const FONT_FAMILIES = {
   "noto-serif": '"Noto Serif KR", serif',
   gowun: '"Gowun Batang", serif',
@@ -109,7 +113,7 @@ async function init() {
   registerServiceWorker();
 
   try {
-    const response = await fetch("./data/library.json");
+    const response = await fetch(PRIVATE_SHELF ? "./data/library-bm.json" : "./data/library.json");
     if (!response.ok) throw new Error(`목록을 불러오지 못했습니다 (${response.status})`);
     state.libraryData = await response.json();
     migrateLegacyDoctorData();
@@ -390,7 +394,7 @@ async function startVolume(volumeNumber, requestedPosition = null) {
 
     elements.volumeSelect.value = String(volumeNumber);
     elements.chapterSelect.innerHTML = state.volumeData.chapters
-      .map((chapter, index) => `<option value="${index}">${chapter.number}화</option>`)
+      .map((chapter, index) => `<option value="${index}">${chapter.title || `${chapter.number}화`}</option>`)
       .join("");
     elements.chapterSelect.value = String(state.chapterIndex);
 
@@ -421,7 +425,7 @@ async function loadVolume(volumeNumber) {
 
 async function ensureReadingFont() {
   if (!document.fonts) return;
-  const family = FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font];
+  const family = PRIVATE_SHELF ? SYSTEM_FONT : FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font];
   const size = `${state.settings.fontSize}px`;
   try {
     await Promise.all([400, 600, 700].map((weight) => document.fonts.load(`${weight} ${size} ${family}`)));
@@ -623,7 +627,7 @@ async function moveChapter(direction) {
     state.chapterIndex = direction > 0 ? 0 : state.volumeData.chapters.length - 1;
     elements.volumeSelect.value = String(nextVolume);
     elements.chapterSelect.innerHTML = state.volumeData.chapters
-      .map((chapter, index) => `<option value="${index}">${chapter.number}화</option>`)
+      .map((chapter, index) => `<option value="${index}">${chapter.title || `${chapter.number}화`}</option>`)
       .join("");
     await paginateCurrentChapter(direction < 0 ? Number.MAX_SAFE_INTEGER : 0);
   } finally {
@@ -803,7 +807,10 @@ function loadSettings() {
 function applySettings(save = true) {
   state.settings = { ...DEFAULT_SETTINGS, ...state.settings };
   const root = document.documentElement;
-  root.style.setProperty("--font-family", FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font]);
+  root.style.setProperty(
+    "--font-family",
+    PRIVATE_SHELF ? SYSTEM_FONT : FONT_FAMILIES[state.settings.font] || FONT_FAMILIES[DEFAULT_SETTINGS.font],
+  );
   root.style.setProperty("--font-size", `${state.settings.fontSize}px`);
   root.style.setProperty("--font-weight", state.settings.fontWeight);
   root.style.setProperty("--line-height", state.settings.lineHeight);

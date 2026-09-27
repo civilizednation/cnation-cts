@@ -60,6 +60,9 @@
 }
 
 :root {
+  /* 내장 서브셋 글꼴. /bm 서재는 아래에서 기기 기본 글꼴로 바꿉니다. */
+  --display-font: "Noto Serif KR", serif;
+  --ui-font: "Noto Sans KR", sans-serif;
   --ink: #20252b;
   --ink-soft: #5b5f63;
   --frame: #18202a;
@@ -68,14 +71,14 @@
   --paper: #fbf8ef;
   --paper-deep: #f0eadc;
   --paper-shadow: rgba(43, 29, 17, 0.26);
-  --font-family: "Noto Serif KR", serif;
+  --font-family: var(--display-font);
   --font-size: 19px;
   --font-weight: 400;
   --line-height: 1.9;
   --paragraph-gap: 0.55em;
   --page-padding: 26px;
   color-scheme: light;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: var(--ui-font);
 }
 
 * {
@@ -138,7 +141,7 @@ button {
   background: linear-gradient(145deg, #253241, #141b23);
   box-shadow: inset 0 0 0 5px rgba(185, 150, 91, 0.08), 0 16px 35px rgba(0, 0, 0, 0.28);
   color: #d9bd88;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 30px;
 }
 
@@ -159,7 +162,7 @@ p {
 
 .library h1 {
   margin-bottom: 5px;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: clamp(34px, 5vw, 54px);
   font-weight: 600;
   letter-spacing: -0.05em;
@@ -251,7 +254,7 @@ p {
   border: 1px solid rgba(185, 150, 91, 0.65);
   box-shadow: inset 0 0 0 5px rgba(185, 150, 91, 0.07);
   color: #d9bd88;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 34px;
 }
 
@@ -275,7 +278,7 @@ p {
 .book-card-copy strong {
   display: block;
   margin-bottom: 13px;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: clamp(23px, 3vw, 32px);
   line-height: 1.35;
   letter-spacing: -0.04em;
@@ -328,7 +331,7 @@ p {
 }
 
 .continue-card strong {
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 22px;
 }
 
@@ -356,7 +359,7 @@ p {
 
 .section-heading h2 {
   margin-bottom: 0;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: clamp(25px, 3vw, 34px);
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -411,7 +414,7 @@ p {
 .volume-number {
   display: block;
   color: var(--brass);
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 34px;
   line-height: 1;
 }
@@ -419,7 +422,7 @@ p {
 .volume-title {
   display: block;
   margin-top: 24px;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 17px;
   font-weight: 600;
 }
@@ -658,7 +661,7 @@ p {
   position: absolute;
   z-index: 2;
   color: rgba(50, 46, 40, 0.55);
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: var(--ui-font);
   font-size: 12px;
   letter-spacing: 0.04em;
 }
@@ -693,7 +696,7 @@ p {
   display: grid;
   place-items: center;
   color: rgba(74, 58, 39, 0.18);
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 48px;
   content: "終";
 }
@@ -790,7 +793,7 @@ p {
 
 .panel-header h2 {
   margin: 0;
-  font-family: "Noto Serif KR", serif;
+  font-family: var(--display-font);
   font-size: 26px;
 }
 
@@ -1120,4 +1123,15 @@ p {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* /bm 서재: 내장 글꼴을 전혀 받지 않고 기기 기본 글꼴로 읽습니다.
+   그래서 글꼴 고르는 칸도 감춥니다. */
+:root[data-shelf="bm"] {
+  --display-font: serif;
+  --ui-font: system-ui, sans-serif;
+}
+
+:root[data-shelf="bm"] #font-field {
+  display: none;
 }
